@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Login } from 'src/app/shared/models/login.model';
 import { User } from 'src/app/shared/models/user.model';
 
 const LS_KEY = 'current-user';
@@ -7,11 +9,6 @@ const LS_KEY = 'current-user';
   providedIn: 'root'
 })
 export class LoginService {
-
-  constructor(
-    public login?: string,
-    public password?: string
-  ) { }
 
   public get currentUser(): User {
     let user = localStorage.getItem(LS_KEY);
@@ -22,7 +19,14 @@ export class LoginService {
     localStorage.setItem(LS_KEY, JSON.stringify(user));
   }
 
-  logout() {
+  login(login: Login): Observable<User | null> {
+    let user = new User(1, 'User-Func', login.login, login.password,
+    'FUNC')
 
+    return of(user);
+  }
+
+  logout() {
+    localStorage.removeItem(LS_KEY);
   }
 }
